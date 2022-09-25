@@ -129,6 +129,7 @@ class SingleLinkedList : public LinkedList {
 };  // end of Class
 
 //  ------------------> <--------------------  //
+
 class CircularLinkedList : public LinkedList {
    public:
     node* head;             // Header of the list
@@ -180,7 +181,7 @@ class CircularLinkedList : public LinkedList {
             }
             tempPrev = tempCurr;
             tempCurr = tempCurr->next;
-            if (tempPrev==head)
+            if (tempPrev == head)
                 break;
         }
         if (!flag)
@@ -205,7 +206,7 @@ class CircularLinkedList : public LinkedList {
             while (tempCurr) {
                 if (tempCurr->value == which) {
                     tempPrev->next = tempCurr->next;
-                    head = tempPrev->next;
+                    // head = tempPrev->next;
                     flag = true;
                     break;
                     // deleted node still exist :(
@@ -268,6 +269,145 @@ class CircularLinkedList : public LinkedList {
 
 };  // end of Class
 
+//  ------------------> <--------------------  //
+
+class DoubleLinkedList : public LinkedList {
+   public:
+    node* head;           // Header of the list
+    DoubleLinkedList() {  // Constructor
+        head = NULL;
+    }
+
+    // Method to append node, takes a node pointer
+    void appendNode(node* Node) {
+        node* temp = head;
+        if (head == NULL) {
+            head = Node;
+            head->next = head;
+            head->prev = head;
+        } else {
+            while (temp->next && temp->next != head)  // Taking out Last-Node
+                temp = temp->next;
+
+            temp->next = Node;  // Changes at Tail
+            Node->prev = temp;
+            Node->next = head;  // Changes at Head
+            head->prev = Node;
+        }
+    }
+
+    // Inserting at Tail/ Just before the head
+    void perpendNode(node* Node) {
+        appendNode(Node);
+        head = Node;
+    }
+
+    // Method to Insert Node after a Node
+    void insertNode(node* Node, int where) {
+        node* tempCurr = head->next;
+        node* tempPrev = head;
+        bool flag = false;
+        while (tempCurr) {
+            if (tempPrev->value == where) {
+                tempPrev->next = Node;
+                Node->prev = tempPrev;
+                Node->next = tempCurr;
+                tempCurr->prev = Node;
+                flag = true;
+                break;
+            }
+            tempPrev = tempCurr;
+            tempCurr = tempCurr->next;
+            if (tempPrev == head)
+                break;
+        }
+        if (!flag)
+            cout << "⚠️ Sorry! the insertion point is not Found!!" << endl;
+    }
+
+    // Method to Delete Node
+    void deleteNode(int which) {
+        cout << (head->prev == head) << endl;
+        node* tempCurr = head->next;
+        node* tempPrev = head;
+        bool flag = false;
+
+        if (head == NULL) {
+            cout << "Kindly fill the list, it's empty" << endl;
+        } else if (head->value == which) {
+            if (head->next != head) {
+                node* p = head->prev;
+                head = head->next;
+                head->prev = p;
+                flag = true;
+            } else
+                head = NULL;
+        } else
+            while (tempCurr) {
+                if (tempCurr->value == which) {
+                    tempPrev->next = tempCurr->next;
+                    tempCurr->next->prev = tempPrev;
+                    flag = true;
+                    cout << "Deleted Successfully" << endl;
+                    break;
+                    // deleted node still exist :(
+                }
+                tempPrev = tempCurr;  // Traversing
+                tempCurr = tempCurr->next;
+                if (tempPrev == head) {
+                    cout << "^^^^" << endl;
+                    break;
+                }
+            }
+
+        if (!flag)
+            cout << "⚠️ Node Doesn't Exist!!" << endl;
+        cout << "Exiting..." << endl;
+    }
+
+    // Change the data of Node
+    void
+    updateNode(int newValue, int prevValue) {
+        node* temp = head;
+        bool flag = false;
+
+        if (head->value == prevValue) {
+            head->value = newValue;
+            flag = true;
+        } else {
+            while (temp) {
+                temp = temp->next;
+                if (temp->value == prevValue && temp != head) {
+                    temp->value = newValue;
+                    cout << "Change has made sucessfully! " << endl;
+                    flag = true;
+                    break;
+                }
+                if (temp->next == head)
+                    break;
+            }
+        }
+        if (!flag) {
+            cout << "⚠️ Node doesn't exist!!" << endl;
+        }
+    }
+
+    // Method to Display whole List
+    void displayList() {
+        if (head == NULL) {
+            cout << "The list is empty! Kindly fill it";
+        } else {
+            node* temp = head;
+            cout << " <-- (" << temp->value << ") --> ";
+            while (temp && temp->next != head) {
+                cout << "<--- (" << temp->next->value << ") --> ";
+                temp = temp->next;
+            }
+        }
+        cout << endl;
+    }
+};  // end of Class
+
 int main() {
     LinkedList* list;
     int choice;
@@ -291,6 +431,8 @@ int main() {
         list = &l;
     } else if (choice == 3) {
         cout << "\nLet's build Double-Linked List: ";
+        DoubleLinkedList l;
+        list = &l;
     }
 
     while (choice != 0) {
