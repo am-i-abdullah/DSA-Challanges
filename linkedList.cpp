@@ -58,9 +58,10 @@ class SingleLinkedList : public LinkedList {
         bool flag = true;
         while (temp) {
             if (temp->value == where) {
+                Node->next = temp->next;
                 temp->next = Node;
-                Node->next = temp->next->next;
                 flag = false;
+                break;
             }
             temp = temp->next;
         }
@@ -264,8 +265,8 @@ int main() {
         cout << "\nThanks for being Here!";
     } else if (choice == 1) {
         cout << "\nLet's build Singly-Linked List: " << endl;
-        // SingleLinkedList l;
-        // list = &l;
+        SingleLinkedList l;
+        list = &l;
     } else if (choice == 2) {
         cout << "\nLet's build Circular-Linked List: ";
         CircularLinkedList l;
