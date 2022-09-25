@@ -169,64 +169,82 @@ class CircularLinkedList : public LinkedList {
 
     // Method to Insert Node after a Node
     void insertNode(node* Node, int where) {
-        node* temp = head;
-        bool flag = true;
-        while (temp) {
-            if (temp->value == where) {
-                temp->next = Node;
-                Node->next = temp->next->next;
-                flag = false;
+        node* tempCurr = head->next;
+        node* tempPrev = head;
+        bool flag = false;
+        while (tempCurr) {
+            if (tempPrev->value == where) {
+                tempPrev->next = Node;
+                Node->next = tempCurr;
+                flag = true;
             }
-            temp = temp->next;
+            tempPrev = tempCurr;
+            tempCurr = tempCurr->next;
+            if (tempPrev==head)
+                break;
         }
-        if (flag)
+        if (!flag)
             cout << "⚠️ Sorry! the insertion point is not Found!!" << endl;
     }
 
     // Method to Delete Node
     void deleteNode(int which) {
-        node* temp = head;
-        bool flag = false;
-        if (head->value == which) {
-            head = head->next;
-            flag = true;
-            // previous head still exist :(
+        if (head == NULL) {
+            cout << "Kindly fill the list, it's empty" << endl;
         } else {
-            while (temp->next) {
-                if (temp->next->value == which) {
-                    temp->next = temp->next->next;
+            node* tempCurr = head->next;
+            node* tempPrev = head;
+            bool flag = false;
+
+            if (head->value == which) {
+                if (head->next == head)
+                    head = NULL;
+                flag = true;
+                // previous head still exist :(
+            }
+            while (tempCurr) {
+                if (tempCurr->value == which) {
+                    tempPrev->next = tempCurr->next;
+                    head = tempPrev->next;
                     flag = true;
                     break;
                     // deleted node still exist :(
                 }
-                temp = temp->next;
+                tempPrev = tempCurr;
+                tempCurr = tempCurr->next;
+                if (tempPrev == head) {
+                    cout << "^^^^" << endl;
+                    break;
+                }
             }
+
+            if (!flag)
+                cout << "⚠️ Node Doesn't Exist!!" << endl;
         }
-        if (!flag)
-            cout << "⚠️ Node Doesn't Exist!!" << endl;
     }
 
     // Change the data of Node
     void updateNode(int newValue, int prevValue) {
         node* temp = head;
-        bool flag = true;
+        bool flag = false;
 
-        if (head->value = prevValue) {
+        if (head->value == prevValue) {
             cout << "head Value: " << head->value;
             head->value = newValue;
-        }
-
-        while (temp) {
-            temp = temp->next;
-            cout << "here I'm";
-            if (temp->value == prevValue && temp != head) {
-                temp->value = newValue;
-                cout << "Change has made sucessfully! " << endl;
-                flag = true;
-                break;
+            flag = true;
+        } else {
+            while (temp) {
+                temp = temp->next;
+                cout << "here I'm";
+                if (temp->value == prevValue && temp != head) {
+                    temp->value = newValue;
+                    cout << "Change has made sucessfully! " << endl;
+                    flag = true;
+                    break;
+                }
+                if (temp->next == head)
+                    break;
             }
-            if (temp->next == head)
-                break;
         }
         if (!flag) {
             cout << "⚠️ Node doesn't exist!!" << endl;
@@ -284,7 +302,7 @@ int main() {
              << "3. Insert Node " << endl
              << "4. Update Node     "
              << "5. Delete Node " << endl
-             << "6. Display Node    "
+             << "6. Display List    "
              << ">>  ";
         cin >> option;
         if (option == 0) {
