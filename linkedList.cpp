@@ -302,17 +302,23 @@ class DoubleLinkedList : public LinkedList {
 
     // Method to Delete Node
     void deleteNode(int which) {
-        cout << (head->prev == head) << endl;
-        node* tempCurr = head->next;
-        node* tempPrev = head;
         bool flag = false;
-
-        if (head == NULL) {
-            cout << "Kindly fill the list, it's empty" << endl;
+        if (!head) {
+            cout << ">> Empty List, Fill it up Buddy..." << endl;
+            return;
+        } else if (head->value == which) {
+            head = (head->next != NULL) ? head->next : NULL;
+            flag = true;
+        } else {
+            node* temp = head;
+            while (temp) {
+                if (temp->next->value == which) {
+                    temp->next = (temp->next->next != NULL) ? temp->next->next : NULL;
+                    flag = true;
+                }
+                temp = temp->next;
+            }
         }
-        if (!flag)
-            cout << "⚠️ Node Doesn't Exist!!" << endl;
-        cout << "Exiting..." << endl;
     }
 
     // Change the data of Node
@@ -321,41 +327,36 @@ class DoubleLinkedList : public LinkedList {
         node* temp = head;
         bool flag = false;
 
-        if (head->value == prevValue) {
-            head->value = newValue;
-            flag = true;
-        } else {
-            while (temp) {
-                temp = temp->next;
-                if (temp->value == prevValue && temp != head) {
-                    temp->value = newValue;
-                    cout << "Change has made sucessfully! " << endl;
-                    flag = true;
-                    break;
-                }
-                if (temp->next == head)
-                    break;
+        while (temp) {
+            if (temp->value == prevValue) {
+                temp->value = newValue;
+                flag = true;
+                break;
             }
+            temp = temp->next;
         }
-        if (!flag) {
-            cout << "⚠️ Node doesn't exist!!" << endl;
-        }
+
+        if (!flag)
+            cout << ">> ⚠️ Node doesn't exist!!" << endl;
+        else
+            cout << ">> Operation Sucessful!!" << endl;
     }
 
     // Method to Display whole List
     void displayList() {
         if (head == NULL) {
-            cout << "The list is empty! Kindly fill it";
+            cout << ">> The list is empty! Kindly fill it" << endl;
         } else {
-            node* temp = head;
-            cout << " (" << temp->value << ") --> ";
-            while (temp->next->next) {
-                cout << "<-- (" << temp->next->value << ") --> ";
-                temp = temp->next;
+            cout << "(" << head->value << ") --> ";
+            if (head->next != NULL) {
+                node* temp = head->next;
+                while (temp->next) {
+                    cout << "<-- (" << temp->value << ") --> ";
+                    temp = temp->next;
+                }
+                cout << "<-- (" << temp->value << ") ";
             }
-            cout << "<-- (" << temp->next->value << ") ";
         }
-        cout << endl;
     }
 };  // end of Class
 
