@@ -57,18 +57,20 @@ class SingleLinkedList : public LinkedList {
     // Method to Insert Node after a Node
     void insertNode(node* Node, int where) {
         node* temp = head;
-        bool flag = true;
+        bool flag = false;
         while (temp) {
             if (temp->value == where) {
                 Node->next = temp->next;
                 temp->next = Node;
-                flag = false;
+                flag = true;
                 break;
             }
             temp = temp->next;
         }
         if (flag)
-            cout << "⚠️ Sorry! the insertion point is not Found!!" << endl;
+            cout << ">> ⚠️ Sorry! the insertion point is not Found!!" << endl;
+        else
+            cout << ">> Operation Sucessful!";
     }
 
     // Method to Delete Node
@@ -78,20 +80,20 @@ class SingleLinkedList : public LinkedList {
         if (head->value == which) {
             head = head->next;
             flag = true;
-            // previous head still exist :(
         } else {
             while (temp->next) {
                 if (temp->next->value == which) {
                     temp->next = temp->next->next;
                     flag = true;
                     break;
-                    // deleted node still exist :(
                 }
                 temp = temp->next;
             }
         }
         if (!flag)
-            cout << "⚠️ Node Doesn't Exist!!" << endl;
+            cout << ">> ⚠️ Node Doesn't Exist!!" << endl;
+        else
+            cout << ">> Operation Sucessful!";
     }
 
     // Change the data of Node
@@ -101,23 +103,21 @@ class SingleLinkedList : public LinkedList {
         while (temp) {
             if (temp->value == prevValue) {
                 temp->value = newValue;
-                cout << "Change has made sucessfully! " << endl;
+                cout << ">> Operation Sucessful!" << endl;
                 flag = true;
                 break;
             }
             temp = temp->next;
         }
-        if (!temp) {
-            cout << "⚠️ Node doesn't exist!!" << endl;
-        }
+        if (!temp)
+            cout << ">> ⚠️ Node doesn't exist!!" << endl;
     }
 
     // Method to Display whole List
     void displayList() {
-        if (head == NULL) {
-            cout << "The list is empty! Kindly fill it";
-            cout << "haha";
-        } else {
+        if (head == NULL)
+            cout << "The list is empty! Kindly fill it" << endl;
+        else {
             node* temp = head;
             while (temp) {
                 cout << "(" << temp->value << ")"
@@ -177,7 +177,9 @@ class CircularLinkedList : public LinkedList {
                 break;
         }
         if (!flag)
-            cout << "⚠️ Sorry! the insertion point is not Found!!" << endl;
+            cout << ">> ⚠️ Node Doesn't Exist!!" << endl;
+        else
+            cout << ">> Operation Sucessful!";
     }
 
     // Method to Delete Node
@@ -189,7 +191,7 @@ class CircularLinkedList : public LinkedList {
         if (head->value == which)
             head = head->next;
         if (head == NULL) {
-            cout << "Kindly fill the list, it's empty" << endl;
+            cout << ">> Kindly fill the list, it's empty" << endl;
         } else {
             node* temp = head;
             bool flag = false;
@@ -205,6 +207,8 @@ class CircularLinkedList : public LinkedList {
             }
             if (!flag)
                 cout << "⚠️ Sorry! the insertion point is not Found!!" << endl;
+            else
+                cout << ">> Operation Sucessful!";
         }
     }
 
@@ -224,9 +228,10 @@ class CircularLinkedList : public LinkedList {
                 break;
         }
 
-        if (!flag) {
-            cout << "⚠️ Node doesn't exist!!" << endl;
-        }
+        if (!flag)
+            cout << ">> ⚠️ Node doesn't exist!!" << endl;
+        else
+            cout << ">> Operation Sucessful!";
     }
 
     // Method to Display whole List
@@ -298,6 +303,8 @@ class DoubleLinkedList : public LinkedList {
         }
         if (!flag)
             cout << "⚠️ Sorry! the insertion point is not Found!!" << endl;
+        else
+            cout << ">> Operation Sucessful!";
     }
 
     // Method to Delete Node
@@ -335,7 +342,6 @@ class DoubleLinkedList : public LinkedList {
             }
             temp = temp->next;
         }
-
         if (!flag)
             cout << ">> ⚠️ Node doesn't exist!!" << endl;
         else
@@ -400,7 +406,7 @@ int main() {
              << ">>  ";
         cin >> option;
         if (option == 0) {
-            cout << "Thanks for being here";
+            cout << "Thanks for being here" << endl;
             list->displayList();
             break;
 
@@ -440,6 +446,5 @@ int main() {
         } else
             cout << "Valid Input please!!" << endl;
     }
-
     return 0;
 }
