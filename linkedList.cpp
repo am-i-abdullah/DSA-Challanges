@@ -366,14 +366,144 @@ class DoubleLinkedList : public LinkedList {
     }
 };  // end of Class
 
+//  ------------------> <--------------------  //
+
+class DoubleCircularList : public LinkedList {
+   public:
+    node* head;             // Header of the list
+    DoubleCircularList() {  // Constructor
+        head = NULL;
+    }
+
+    // Method to append node, takes a node pointer
+    void appendNode(node* Node) {
+        if (head == NULL) {
+            Node->next = Node;
+            Node->prev = Node;
+            head = Node;
+        } else {
+            node* temp = head;
+            while (temp->next != head) {  // Taking out Last-Node
+                temp = temp->next;
+                if (temp == head)
+                    break;
+            }
+            temp->next = Node;  // Changes at Tail
+            Node->prev = temp;
+            Node->next = head;  // Changes at Head
+            head->prev = Node;
+        }
+    }
+
+    // Inserting at Tail/ Just before the head
+    void perpendNode(node* Node) {
+        appendNode(Node);
+        head = Node;
+    }
+
+    // Method to Insert Node after a Node
+    void insertNode(node* Node, int where) {
+        node* temp = head;
+        bool flag = false;
+
+        while (temp) {
+            if (temp->value == where) {
+                Node->next = temp->next;  // Changes After
+                temp->next->prev = Node;
+
+                temp->next = Node;  // Changes Before
+                Node->prev = temp;
+                flag = true;
+                break;
+            }
+            temp = temp->next;
+            if (temp == head)
+                break;
+        }
+
+        if (!flag)
+            cout << "⚠️ Sorry! the insertion point is not Found!!" << endl;
+        else
+            cout << ">> Operation Sucessful!" << endl;
+    }
+
+    // Method to Delete Node
+    void deleteNode(int which) {
+        bool flag = false;
+        if (!head) {
+            cout << ">> Empty List, Fill it up Buddy..." << endl;
+            return;
+        } else if (head->value == which && head->next == head) {
+            head = (head->next != NULL) ? head->next : NULL;
+            flag = true;
+        } else {
+            node* temp = head;
+            while (temp) {
+                if (temp->next->value == which) {
+                    temp->next = temp->next->next;
+                    temp->next->prev = temp;
+                    flag = true;
+                    break;
+                }
+                temp = temp->next;
+                if (temp == head)
+                    break;
+            }
+        }
+        if (!flag)
+            cout << "⚠️ Sorry! the Deletion point is not Found!!" << endl;
+        else
+            cout << ">> Operation Sucessful!" << endl;
+    }
+
+    // Change the data of Node
+    void updateNode(int newValue, int prevValue) {
+        node* temp = head;
+        bool flag = false;
+
+        while (temp) {
+            if (temp->value == prevValue) {
+                temp->value = newValue;
+                flag = true;
+                break;
+            }
+            temp = temp->next;
+            if (temp == head)
+                break;
+        }
+        if (!flag)
+            cout << ">> ⚠️ Node doesn't exist!!" << endl;
+        else
+            cout << ">> Operation Sucessful!!" << endl;
+    }
+
+    // Method to Display whole List
+    void displayList() {
+        if (head == NULL) {
+            cout << ">> The list is empty! Kindly fill it" << endl;
+        } else {
+            node* temp = head;
+            while (temp) {
+                cout << "<--( " << temp->value << " )-->";
+                temp = temp->next;
+                if (temp == head)
+                    break;
+            }
+        }
+        cout << endl;
+    }
+
+};  // end of Class
+
 int main() {
     LinkedList* list;
     int choice;
     cout << "Welcome to LINKED-LISTS: " << endl
          << "0. Exit" << endl
          << "1. Singly-Linked List" << endl
-         << "2. Circular-Linked List" << endl
+         << "2. Single-Circular List" << endl
          << "3. Double-Linked List" << endl
+         << "4. Double-Circular List" << endl
          << ">> ";
     cin >> choice;
 
@@ -384,12 +514,16 @@ int main() {
         SingleLinkedList l;
         list = &l;
     } else if (choice == 2) {
-        cout << "\nLet's build Circular-Linked List: ";
+        cout << "\nLet's build Single-Circular List: ";
         CircularLinkedList l;
         list = &l;
     } else if (choice == 3) {
         cout << "\nLet's build Double-Linked List: ";
         DoubleLinkedList l;
+        list = &l;
+    } else if (choice == 4) {
+        cout << "\nLet's build Double-Circular List: ";
+        DoubleCircularList l;
         list = &l;
     }
 
