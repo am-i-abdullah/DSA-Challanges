@@ -314,18 +314,24 @@ class DoubleLinkedList : public LinkedList {
             cout << ">> Empty List, Fill it up Buddy..." << endl;
             return;
         } else if (head->value == which) {
-            head = (head->next != NULL) ? head->next : NULL;
+            head = head->next;
             flag = true;
         } else {
             node* temp = head;
-            while (temp) {
+            while (temp->next) {
                 if (temp->next->value == which) {
-                    temp->next = (temp->next->next != NULL) ? temp->next->next : NULL;
+                    temp->next = temp->next->next;
                     flag = true;
+                    break;
                 }
                 temp = temp->next;
             }
         }
+
+        if (!flag)
+            cout << ">> ⚠️ Node doesn't exist!!" << endl;
+        else
+            cout << ">> Operation Sucessful!!" << endl;
     }
 
     // Change the data of Node
@@ -433,8 +439,9 @@ class DoubleCircularList : public LinkedList {
         if (!head) {
             cout << ">> Empty List, Fill it up Buddy..." << endl;
             return;
-        } else if (head->value == which && head->next == head) {
-            head = (head->next != NULL) ? head->next : NULL;
+        } else if (head->value == which) {
+            head->prev->next = head->next;
+            head = (head->next == head) ? NULL : head->next;
             flag = true;
         } else {
             node* temp = head;
@@ -445,9 +452,7 @@ class DoubleCircularList : public LinkedList {
                     flag = true;
                     break;
                 }
-                temp = temp->next;
-                if (temp == head)
-                    break;
+                temp = (temp->next != head) ? temp->next : NULL;
             }
         }
         if (!flag)
